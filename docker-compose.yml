@@ -1,0 +1,164 @@
+services:
+  zookeeper:
+      image: 'bitnami/zookeeper:3.8-debian-10'
+      ports:
+        - '2181:2181'
+      environment:
+        - ALLOW_ANONYMOUS_LOGIN=yes
+      restart: always
+
+  kafka:
+    image: 'bitnami/kafka:3.1-debian-10'
+    ports:
+      - '9092:9092'
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
+    restart: always
+
+  users-db:
+    container_name: users-db
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: instagram_users
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 221103
+    ports:
+      - "5433:5432"
+    volumes:
+      - users-db-data:/var/lib/postgresql/data
+
+
+  users-service:
+    build:
+      context: ./users_service
+      dockerfile: Dockerfile
+    container_name: users-service
+    ports:
+      - "8001:8001"
+    restart: always
+    environment:
+      DB_HOST: users-db
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: 221103
+      KAFKA_HOST: kafka:9092
+    depends_on:
+      - users-db
+      - kafka
+
+
+  follow-db:
+    container_name: follow-db
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: instagram_follow
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 221103
+    ports:
+      - "5434:5432"
+    volumes:
+      - follow-db-data:/var/lib/postgresql/data
+
+
+  follow-service:
+    build:
+      context: ./follow_service
+      dockerfile: Dockerfile
+    container_name: follow-service
+    ports:
+      - "8004:8004"
+    restart: always
+    environment:
+      DB_HOST: follow-db
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: 221103
+      KAFKA_HOST: kafka:9092
+    depends_on:
+      - follow-db
+      - kafka
+
+
+  feeds-db:
+    container_name: feeds-db
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: instagram_feeds
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 221103
+    ports:
+      - "5435:5432"
+    volumes:
+      - feeds-db-data:/var/lib/postgresql/data
+
+  feeds-service:
+    build:
+      context: ./feeds_service
+      dockerfile: Dockerfile
+    container_name: feeds-service
+    ports:
+      - "8002:8002"
+    restart: always
+    environment:
+      DB_HOST: feeds-db
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: 221103
+    depends_on:
+      - feeds-db
+
+  stories-db:
+    container_name: stories-db
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: instagram_stories
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 221103
+    ports:
+      - "5432:5432"
+    volumes:
+      - stories-db-data:/var/lib/postgresql/data
+
+  stories-service:
+    build:
+      context: ./stories_service
+      dockerfile: Dockerfile
+    container_name: stories-service
+    ports:
+      - "8003:8003"
+    restart: always
+    environment:
+      DB_HOST: stories-db
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: 221103
+    depends_on:
+      - stories-db
+
+  nginx:
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    container_name: nginx
+    ports:
+      - "81:80"
+    depends_on:
+      - stories-service
+      - feeds-service
+      - follow-service
+      - users-service
+
+
+volumes:
+  users-db-data: {}
+  feeds-db-data: {}
+  stories-db-data: {}
+  follow-db-data: {}
+
+
