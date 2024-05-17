@@ -14,6 +14,7 @@ export default class AuthController {
 
     static signIn = async (req:Request, res:Response, next:NextFunction) =>{
         const {username, password} = req.body
+        console.log(username, password)
         const data = await AuthService.signIn(username, password)
         return res.status(statusCode.OK).json(new HttpResponse(statusCode.OK, "sign in successfully", data))
     }

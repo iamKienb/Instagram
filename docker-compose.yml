@@ -43,14 +43,17 @@ services:
       - "8001:8001"
     restart: always
     environment:
-      DB_HOST: users-db
-      DB_PORT: 5432
-      DB_USERNAME: postgres
-      DB_PASSWORD: 221103
-      KAFKA_HOST: kafka:9092
+      - DB_HOST=users-db
+      - KEY_SECRET=kcnjFgVmiukoUHzhs1VVG
+      - API_KEY=913979181349247
+      - API_SECRET=kcnjFgVmiukoUHzhs1VVG_4jyZ4
+      - CLOUD_NAME=my-shop-cloud
+      - USER_TOPIC=USER_SERVICE
+      - KAFKA_HOST=kafka:9092
     depends_on:
       - users-db
       - kafka
+
 
 
   follow-db:
@@ -75,11 +78,14 @@ services:
       - "8004:8004"
     restart: always
     environment:
-      DB_HOST: follow-db
-      DB_PORT: 5432
-      DB_USERNAME: postgres
-      DB_PASSWORD: 221103
-      KAFKA_HOST: kafka:9092
+      - DB_HOST=follow-db
+      - KEY_SECRET=kcnjFgVmiukoUHzhs1VVG
+      - API_KEY=913979181349247
+      - API_SECRET=kcnjFgVmiukoUHzhs1VVG_4jyZ4
+      - CLOUD_NAME=my-shop-cloud
+      - USER_TOPIC=USER_SERVICE
+      - FOLLOW_TOPIC=FOLLOW_SERVICE
+      - KAFKA_HOST=kafka:9092
     depends_on:
       - follow-db
       - kafka
@@ -106,12 +112,15 @@ services:
       - "8002:8002"
     restart: always
     environment:
-      DB_HOST: feeds-db
-      DB_PORT: 5432
-      DB_USERNAME: postgres
-      DB_PASSWORD: 221103
+      - DB_HOST=feeds-db
+      - KEY_SECRET=kcnjFgVmiukoUHzhs1VVG
+      - API_KEY=913979181349247
+      - API_SECRET=kcnjFgVmiukoUHzhs1VVG_4jyZ4
+      - CLOUD_NAME=my-shop-cloud
     depends_on:
       - feeds-db
+
+
 
   stories-db:
     container_name: stories-db
@@ -134,12 +143,47 @@ services:
       - "8003:8003"
     restart: always
     environment:
-      DB_HOST: stories-db
-      DB_PORT: 5432
-      DB_USERNAME: postgres
-      DB_PASSWORD: 221103
+      - DB_HOST=stories-db
+      - KEY_SECRET=kcnjFgVmiukoUHzhs1VVG
+      - API_KEY=913979181349247
+      - API_SECRET=kcnjFgVmiukoUHzhs1VVG_4jyZ4
+      - CLOUD_NAME=my-shop-cloud
+
     depends_on:
       - stories-db
+
+
+
+  chat-db:
+    container_name: chat-db
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: instagram_mess
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 221103
+    ports:
+      - "5436:5432"
+    volumes:
+      - chat-db-data:/var/lib/postgresql/data
+
+  chat-service:
+    build:
+      context: ./chat_service
+      dockerfile: Dockerfile
+    container_name: chat-service
+    ports:
+      - "8005:8005"
+    restart: always
+    environment:
+      - DB_HOST=chat-db
+      - KEY_SECRET=kcnjFgVmiukoUHzhs1VVG
+      - API_KEY=913979181349247
+      - API_SECRET=kcnjFgVmiukoUHzhs1VVG_4jyZ4
+      - CLOUD_NAME=my-shop-cloud
+
+    depends_on:
+      - chat-db
+
 
   nginx:
     build:
@@ -153,6 +197,7 @@ services:
       - feeds-service
       - follow-service
       - users-service
+      - chat-service
 
 
 volumes:
@@ -160,5 +205,6 @@ volumes:
   feeds-db-data: {}
   stories-db-data: {}
   follow-db-data: {}
+  chat-db-data: {}
 
 
