@@ -8,6 +8,7 @@ This project implements a microservice architecture for a simplified Instagram b
 - Node.js with Express: For building fast and scalable server-side applications.
 - **TypeScript**: Adds static type definitions to JavaScript.
 - **Docker**: For containerizing the microservices.
+- **Express**: Web application framework for Node.js.
 - **NGINX (Reverse Proxy)**: For routing requests to appropriate microservices.
 - **Kafka**: For handling message queues across different services.
 - **Multer with Cloudinary**: For handling file uploads and image management.
@@ -28,7 +29,7 @@ This project implements a microservice architecture for a simplified Instagram b
 
 ### Stories Service
 - **Features**:
-  - Like, share, and comment on stories.
+  - Like and comment on stories.
   - Manages user interactions with stories.
 
 ### Follow Service
