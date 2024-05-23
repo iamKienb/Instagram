@@ -8,8 +8,6 @@ import {
 } from "typeorm";
 import Message from "./Message.entity";
 
-
-
 @Entity("chats")
 export default class Chat {
   @PrimaryGeneratedColumn()
