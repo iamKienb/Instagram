@@ -30,3 +30,27 @@ jobs:
       run: |
         npm ci
         npm test
+
+    - name: Test Chat Service
+      working-directory: ./chat_service
+      run: |
+        npm ci
+        npm test
+
+    - name: Test Feeds Service
+      working-directory: ./feeds_service
+      run: |
+        npm ci
+        npm test
+
+    - name: Test Follow Service
+      working-directory: ./follow_service
+      run: |
+        npm ci
+        npm test
+
+    - name: Test Stories Service
+      working-directory: ./stories_service
+      run: |
+        npm ci
+        npm test
