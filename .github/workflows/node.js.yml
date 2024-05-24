@@ -25,32 +25,42 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Test User Service
+    - name: User Service
       working-directory: ./users_service
       run: |
         npm ci
         npm test
+        touch .env
+        echo "${{secrets.PROD_ENV_FILE_USERS}}" > .env
 
-    - name: Test Chat Service
+    - name: Chat Service
       working-directory: ./chat_service
       run: |
         npm ci
         npm test
+        touch .env
+        echo "${{secrets.PROD_ENV_FILE_CHAT}}" > .env
 
-    - name: Test Feeds Service
+    - name:  Feeds Service
       working-directory: ./feeds_service
       run: |
         npm ci
         npm test
+        touch .env
+        echo "${{secrets.PROD_ENV_FILE_FEEDS}}" > .env
 
-    - name: Test Follow Service
+    - name:  Follow Service
       working-directory: ./follow_service
       run: |
         npm ci
         npm test
+        touch .env
+        echo "${{secrets.PROD_ENV_FILE_FOLLOW}}" > .env
 
-    - name: Test Stories Service
+    - name: Stories Service
       working-directory: ./stories_service
       run: |
         npm ci
         npm test
+        touch .env
+        echo "${{secrets.PROD_ENV_FILE_STORIES}}" > .env
