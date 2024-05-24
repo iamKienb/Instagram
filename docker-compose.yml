@@ -44,11 +44,6 @@ services:
     restart: always
     environment:
       - DB_HOST=users-db
-      - KEY_SECRET=kcnjFgVmiukoUHzhs1VVG
-      - API_KEY=913979181349247
-      - API_SECRET=kcnjFgVmiukoUHzhs1VVG_4jyZ4
-      - CLOUD_NAME=my-shop-cloud
-      - USER_TOPIC=USER_SERVICE
       - KAFKA_HOST=kafka:9092
     depends_on:
       - users-db
@@ -79,12 +74,6 @@ services:
     restart: always
     environment:
       - DB_HOST=follow-db
-      - KEY_SECRET=kcnjFgVmiukoUHzhs1VVG
-      - API_KEY=913979181349247
-      - API_SECRET=kcnjFgVmiukoUHzhs1VVG_4jyZ4
-      - CLOUD_NAME=my-shop-cloud
-      - USER_TOPIC=USER_SERVICE
-      - FOLLOW_TOPIC=FOLLOW_SERVICE
       - KAFKA_HOST=kafka:9092
     depends_on:
       - follow-db
@@ -113,10 +102,6 @@ services:
     restart: always
     environment:
       - DB_HOST=feeds-db
-      - KEY_SECRET=kcnjFgVmiukoUHzhs1VVG
-      - API_KEY=913979181349247
-      - API_SECRET=kcnjFgVmiukoUHzhs1VVG_4jyZ4
-      - CLOUD_NAME=my-shop-cloud
     depends_on:
       - feeds-db
 
@@ -144,10 +129,6 @@ services:
     restart: always
     environment:
       - DB_HOST=stories-db
-      - KEY_SECRET=kcnjFgVmiukoUHzhs1VVG
-      - API_KEY=913979181349247
-      - API_SECRET=kcnjFgVmiukoUHzhs1VVG_4jyZ4
-      - CLOUD_NAME=my-shop-cloud
 
     depends_on:
       - stories-db
@@ -176,11 +157,6 @@ services:
     restart: always
     environment:
       - DB_HOST=chat-db
-      - KEY_SECRET=kcnjFgVmiukoUHzhs1VVG
-      - API_KEY=913979181349247
-      - API_SECRET=kcnjFgVmiukoUHzhs1VVG_4jyZ4
-      - CLOUD_NAME=my-shop-cloud
-
     depends_on:
       - chat-db
 
