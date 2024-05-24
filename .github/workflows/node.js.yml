@@ -4,8 +4,7 @@
 name: Node.js CI
 
 on:
-  push:
-    branches: [ "main" ]
+
   pull_request:
     branches: [ "main" ]
 
@@ -64,3 +63,12 @@ jobs:
         npm test
         touch .env
         echo "${{secrets.PROD_ENV_FILE_STORIES}}" > .env
+    - name: Build and run Docker Compose
+      run: |
+        docker-compose up --build -d
+      env:
+        PROD_ENV_FILE_USERS: ${{ secrets.PROD_ENV_FILE_USERS }}
+        PROD_ENV_FILE_CHAT: ${{ secrets.PROD_ENV_FILE_CHAT }}
+        PROD_ENV_FILE_FEEDS: ${{ secrets.PROD_ENV_FILE_FEEDS }}
+        PROD_ENV_FILE_FOLLOW: ${{ secrets.PROD_ENV_FILE_FOLLOW }}
+        PROD_ENV_FILE_STORIES: ${{ secrets.PROD_ENV_FILE_STORIES }}
