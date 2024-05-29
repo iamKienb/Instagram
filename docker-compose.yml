@@ -39,14 +39,12 @@ services:
       context: ./users_service
       dockerfile: Dockerfile
     container_name: users-service
-    env_file: .env
     ports:
       - "8001:8001"
     restart: always
     environment:
       - DB_HOST=users-db
       - KAFKA_HOST=kafka:9092
-      - PROD_ENV_FILE_USERS
     depends_on:
       - users-db
       - kafka
@@ -74,11 +72,9 @@ services:
     ports:
       - "8004:8004"
     restart: always
-    env_file: .env
     environment:
       - DB_HOST=follow-db
       - KAFKA_HOST=kafka:9092
-      - PROD_ENV_FILE_FOLLOW
     depends_on:
       - follow-db
       - kafka
@@ -101,13 +97,11 @@ services:
       context: ./feeds_service
       dockerfile: Dockerfile
     container_name: feeds-service
-    env_file: .env
     ports:
       - "8002:8002"
     restart: always
     environment:
       - DB_HOST=feeds-db
-      - PROD_ENV_FILE_FEEDS
     depends_on:
       - feeds-db
 
@@ -130,14 +124,11 @@ services:
       context: ./stories_service
       dockerfile: Dockerfile
     container_name: stories-service
-    env_file: .env
     ports:
       - "8003:8003"
     restart: always
     environment:
       - DB_HOST=stories-db
-      - PROD_ENV_FILE_STORIES
-      
 
     depends_on:
       - stories-db
@@ -164,10 +155,8 @@ services:
     ports:
       - "8005:8005"
     restart: always
-    env_file: .env
     environment:
       - DB_HOST=chat-db
-      - PROD_ENV_FILE_CHAT
     depends_on:
       - chat-db
 
